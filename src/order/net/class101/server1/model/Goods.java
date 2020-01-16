@@ -13,13 +13,14 @@ import lombok.Setter;
 @Builder
 public class Goods {
 	private String id;
-	private String type;
+	private GoodsType type;
 	private String name;
 	private int price;
 	private int stock;
+	private boolean unlimited;
 
 	@Override
 	public String toString() {
-		return id + " " + type + " " + name + " " + price + " " + stock;
+		return id + " " + type.getType() + " " + name + " " + price + " " + stock;
 	}
 }

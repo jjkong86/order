@@ -12,7 +12,7 @@ import lombok.ToString;
 @Setter
 public class Order {
 	private List<Goods> goods = new ArrayList<>();
-	private boolean goodsType;
+	private boolean classInner;
 	private long totalPrice;
 	private int deliveryCharge;
 
