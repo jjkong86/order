@@ -10,4 +10,5 @@ public interface OrderService {
 	public void chkDeliveryCharge(Order orderList);
 	public void chkOrderAmount(Map<String, Goods> map, Order orderList);
 	public void printAndOrderClear(Order orderList);
+	public void chkStock(Goods goods, Goods orderGoods);
 }

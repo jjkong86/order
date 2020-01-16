@@ -24,17 +24,21 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public void chkOrderAmount(Map<String, Goods> map, Order orderList) {
-		for (Goods g : orderList.getGoods()) {
-			if (g.isUnlimited())
+		for (Goods orderGoods : orderList.getGoods()) {
+			if (orderGoods.isUnlimited())
 				continue;
 
-			Goods temp = map.get(g.getId());
-			int stock = temp.getStock() - g.getStock();
-			if (stock < 0) {
-				throw new SoldOutException("[id : " + g.getId() + "] 재고가 부족합니다.");
-			}
-			temp.setStock(stock);
+			chkStock(map.get(orderGoods.getId()), orderGoods); // 동기화
 		}
+	}
+
+	@Override
+	public synchronized void chkStock(Goods goods, Goods orderGoods) {
+		int stock = goods.getStock() - orderGoods.getStock();
+		if (stock < 0) {
+			throw new SoldOutException("[id : " + orderGoods.getId() + "] 재고가 부족합니다.");
+		}
+		goods.setStock(stock);
 	}
 
 	@Override

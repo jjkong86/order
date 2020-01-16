@@ -2,12 +2,9 @@ package order.net.class101.server1;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
@@ -15,7 +12,6 @@ import java.util.StringJoiner;
 import order.net.class101.server1.cart.CartService;
 import order.net.class101.server1.exception.SoldOutException;
 import order.net.class101.server1.model.Goods;
-import order.net.class101.server1.model.GoodsType;
 import order.net.class101.server1.model.Order;
 import order.net.class101.server1.order.OrderService;
 import order.net.class101.server1.util.Constans;
@@ -41,7 +37,7 @@ public class OrderClient {
 			System.out.print(Constans.OrderAndQuit.getMessage());
 
 			while (Utils.orderInputChk(br.readLine())) {
-				goodsMapPrint();
+				Utils.goodsMapPrint(goodsMap);
 
 				System.out.print("상품번호 : ");
 				while (!Utils.quitInputChk((input = br.readLine()))) {
@@ -55,11 +51,13 @@ public class OrderClient {
 						System.out.print("수량  : ");
 						int count = Integer.parseInt(br.readLine().trim());
 						if (cartService.chkStockLessThanAmount(selectGoods, count)) {
-							cartService.putOrder(selectGoods, count, orderList);
+							cartService.putOrder(selectGoods, count, orderList); // 장바구니에 상품 담기
 						}
 					}
+
 					System.out.print("상품번호 : ");
 				}
+
 				orderList = new Order();
 				System.out.print(Constans.OrderAndQuit.getMessage());
 			}
@@ -67,18 +65,9 @@ public class OrderClient {
 			try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out))) {
 				bw.write(Constans.ThanksForOrder.getMessage());
 			}
+
 		} catch (SoldOutException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private void goodsMapPrint() {
-		StringJoiner sj = new StringJoiner("\n");
-		sj.add("상품번호                              상품명                                     판매가격                 재고수");
-		for (Entry<String, Goods> key : goodsMap.entrySet()) {
-			sj.add(key.getValue().toString());
-		}
-
-		System.out.println("\n" + sj.toString());
 	}
 }

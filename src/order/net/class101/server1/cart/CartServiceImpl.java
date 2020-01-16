@@ -10,6 +10,9 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public void putOrder(Goods selectGoods, int count, Order orderList) {
+		if (!chkStockLessThanAmount(selectGoods, count))
+			return;
+
 		orderList.getGoods().add(Utils.getNewInstance(selectGoods, count));
 		if (selectGoods.getType() == GoodsType.CLASS) {
 			orderList.setClassInner(true);
@@ -18,6 +21,7 @@ public class CartServiceImpl implements CartService {
 			orderList.setTotalPrice(selectGoods.getPrice() * count);
 		}
 	}
+
 	@Override
 	public boolean exsistGoods(Goods selectGoods) {
 		if (selectGoods == null) {
@@ -44,6 +48,7 @@ public class CartServiceImpl implements CartService {
 		}
 		return true;
 	}
+
 	@Override
 	public boolean cartValidation(Goods selectGoods, Order orderList) {
 		if (exsistGoods(selectGoods) && !exsistClass(selectGoods, orderList)) {
