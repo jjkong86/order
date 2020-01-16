@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
 
+import order.net.class101.server1.exception.SoldOutException;
 import order.net.class101.server1.model.Goods;
 import order.net.class101.server1.model.Order;
 import order.net.class101.server1.util.Utils;
@@ -32,49 +33,59 @@ public class OrderTest {
 				map.put(split[0], goods);
 			}
 		}
-		print(map);
 
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
 			String input;
 			String[] quit = new String[] { "q", "quit" };
 			String[] order = new String[] { "o", "order" };
-			System.out.println("입력(o[order]: 주문, q[quit]: 종료) : ");
+			System.out.print("입력(o[order]: 주문, q[quit]: 종료) : ");
 			List<Goods> list = new ArrayList<>();
 			Order orderList = new Order();
-			if (inputChk(order, br.readLine())) {
-				System.out.println("상품번호 : ");
+			while (inputChk(order, br.readLine())) {
+				print(map);
+				System.out.print("상품번호 : ");
 				while (!inputChk(quit, (input = br.readLine()))) {
-
 					if (" ".equals(input)) {
 						System.out.println("주문내역 : ");
 						if (orderList.getTotalPrice() < 50000) {
-							orderList.setTotalPrice(orderList.getTotalPrice() + 5000);
+							orderList.setTotalPrice(5000);
 						}
+						for (Goods g : orderList.getGoods()) {
+							Goods temp = map.get(g.getId());
+							temp.setStock(temp.getStock() - g.getStock());
+						}
+
 						System.out.println(orderList.toString());
 						orderList = new Order();
-						continue;
+						System.out.print("상품번호 : ");
+						break;
 					}
-					Goods temp = map.get(input);
+
+					Goods temp = map.get(input.trim());
 					if (temp != null) {
-						if (orderList.isGoodsType() && temp.getType().equals("class")) {
+						if (orderList.isGoodsType() && temp.getType().equals("클래스")) {
 							System.out.println("class type은 한번에 하나만 결제할 수 있습니다.");
-							continue;
+						} else if (temp.getStock() < 1) {
+							new SoldOutException("재고가 부족합니다.");
+						} else {
+							System.out.print("수량  : ");
+							int count = Integer.parseInt(br.readLine());
+							orderList.getGoods().add(Utils.getNewInstance(map.get(input)));
+							if (temp.getType().equals("클래스")) {
+								orderList.setGoodsType(true);
+							}
+
+							if (count > 0) {
+								orderList.setTotalPrice(temp.getPrice() * count);
+							}
 						}
-						
-						System.out.println("수량  : ");
-						int count = Integer.parseInt(br.readLine());
-						System.out.println("상품번호 : ");
-						orderList.getGoods().add(map.get(input));
-						if (temp.getType().equals("class")) {
-							orderList.setGoodsType(true);
-						}
-						if (count > 0) {
-							orderList.setTotalPrice(temp.getPrice() * count);
-						}
+
 					} else {
 						System.out.println("상품 번호가 존재하지 않습니다.");
 					}
+					System.out.print("상품번호 : ");
 				}
+				System.out.print("입력(o[order]: 주문, q[quit]: 종료) : ");
 			}
 
 			try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out))) {

@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Goods implements Cloneable{
+public class Goods {
 	private String id;
 	private String type;
 	private String name;
