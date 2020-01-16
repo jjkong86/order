@@ -15,6 +15,7 @@ public class Utils {
 	static String[] quit = new String[] { "q", "quit" };
 	static String[] order = new String[] { "o", "order" };
 	static int unlimitedAmount = 99999;
+	static final Map<String, Goods> map = new HashMap<>();
 
 	public static boolean orderInputChk(String input) {
 		for (String str : order) {
@@ -33,7 +34,9 @@ public class Utils {
 	}
 
 	public static Map<String, Goods> buildGoodsList() {
-		Map<String, Goods> map = new HashMap<>();
+		if (map.size() > 0)
+			return map;
+
 		try (BufferedReader br = new BufferedReader(new FileReader(INPUT_FILE_NAME))) {
 			while (br.ready()) {
 				String[] split = Utils.readLineSplit(br.readLine());

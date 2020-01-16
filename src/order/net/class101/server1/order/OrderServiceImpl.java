@@ -36,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
 	public synchronized void chkStock(Goods goods, Goods orderGoods) {
 		int stock = goods.getStock() - orderGoods.getStock();
 		if (stock < 0) {
+			System.out.println("[id : " + orderGoods.getId() +", stock : "+goods.getStock()+", amount : "+orderGoods.getStock()+ "]");
 			throw new SoldOutException("[id : " + orderGoods.getId() + "] 재고가 부족합니다.");
 		}
 		goods.setStock(stock);
