@@ -5,8 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringJoiner;
 import java.util.Map.Entry;
+import java.util.StringJoiner;
 
 import order.net.class101.server1.model.Goods;
 
@@ -60,13 +60,13 @@ public class Utils {
 	}
 
 	public static Goods getInstance(String[] split) {
-		return Goods.builder().id(split[0]).type(EnumMapper.toEnumValues().get(split[1])).name(split[2])
+		return new Goods.Builder().id(split[0]).type(EnumMapper.toEnumValues().get(split[1])).name(split[2])
 				.price(Integer.parseInt(split[3])).stock(Integer.parseInt(split[4]))
 				.unlimited(Integer.parseInt(split[4]) == unlimitedAmount).build();
 	}
 
 	public static Goods getNewInstance(Goods g, int count) {
-		return Goods.builder().id(g.getId()).type(g.getType()).name(g.getName()).price(g.getPrice()).stock(count)
+		return new Goods.Builder().id(g.getId()).type(g.getType()).name(g.getName()).price(g.getPrice()).stock(count)
 				.unlimited(g.isUnlimited()).build();
 	}
 

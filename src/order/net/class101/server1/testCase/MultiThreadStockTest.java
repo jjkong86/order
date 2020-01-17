@@ -20,10 +20,11 @@ public class MultiThreadStockTest {
 		for (int i = 0; i < num; i++) {
 			list.add(new OrderTestRun());
 		}
+
 		for (OrderTestRun run : list) {
 			e.execute(run);
 		}
-		e.awaitTermination(3, TimeUnit.NANOSECONDS);
+		e.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 		e.shutdown();
 	}
 
