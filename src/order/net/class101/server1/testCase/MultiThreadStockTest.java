@@ -24,7 +24,7 @@ public class MultiThreadStockTest {
 		for (OrderTestRun run : list) {
 			e.execute(run);
 		}
-		e.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		e.awaitTermination(3, TimeUnit.SECONDS);
 		e.shutdown();
 	}
 
