@@ -16,7 +16,7 @@ public class MultiThreadStockTest {
 
 	@Test
 	public void 주문_완료_재고_검증() throws InterruptedException {
-		int num = 10;
+		int num = 5;
 		ExecutorService e = Executors.newFixedThreadPool(num);
 		System.out.println(Thread.currentThread().getName());
 		Map<String, Goods> map = Utils.buildGoodsList();
@@ -26,7 +26,6 @@ public class MultiThreadStockTest {
 		for (int i = 0; i < num; i++) {
 			e.execute(() -> {
 				new OrderServiceImpl().chkOrderAmount(map, orderList);
-				System.out.println("상품 수량 : " + map.get(goodsId).getStock());
 			});
 		}
 		e.awaitTermination(3, TimeUnit.SECONDS);
