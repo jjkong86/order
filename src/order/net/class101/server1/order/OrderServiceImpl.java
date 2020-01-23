@@ -35,6 +35,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public int chkStock(Goods goods, Goods orderGoods) {
+		System.out.println("current stock : " + goods.getStock());
 		int stock = goods.getStock() - orderGoods.getStock();
 		updateStock(goods, orderGoods, stock);
 		return stock;
