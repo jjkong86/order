@@ -18,7 +18,6 @@ public class MultiThreadStockTest {
 	public void 주문_완료_재고_검증() throws InterruptedException {
 		int num = 11;
 		ExecutorService e = Executors.newFixedThreadPool(num);
-		System.out.println(Thread.currentThread().getName());
 		Map<String, Goods> map = Utils.buildGoodsList();
 		String goodsId = "91008";
 		Order orderList = new Order();

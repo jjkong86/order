@@ -28,20 +28,22 @@ public class OrderServiceImpl implements OrderService {
 			if (orderGoods.isUnlimited())
 				continue;
 
-			int stock = chkStock(map.get(orderGoods.getId()), orderGoods); // 동기화
+			int stock = chkStock(map, map.get(orderGoods.getId()), orderGoods); // 동기화
 			System.out.println(stock);
 		}
 	}
 
 	@Override
-	public int chkStock(Goods goods, Goods orderGoods) {
-		System.out.println("current stock : " + goods.getStock());
-		int stock = goods.getStock() - orderGoods.getStock();
-		updateStock(goods, orderGoods, stock);
+	public int chkStock(Map<String, Goods> map, Goods goods, Goods orderGoods) {
+		int stock = 0;
+		synchronized (map) {
+			stock = goods.getStock() - orderGoods.getStock();
+			updateStock(goods, orderGoods, stock);
+		}
 		return stock;
 	}
 
-	public synchronized void updateStock(Goods goods, Goods orderGoods, int stock) {
+	public void updateStock(Goods goods, Goods orderGoods, int stock) {
 		if (stock < 0) {
 			throw new SoldOutException("[id : " + orderGoods.getId() + ", stock : " + goods.getStock() + ", amount : "
 					+ orderGoods.getStock() + "] 재고가 부족합니다.");

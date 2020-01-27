@@ -3,10 +3,10 @@ package order.net.class101.server1.util;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
-import java.util.concurrent.ConcurrentHashMap;
 
 import order.net.class101.server1.model.Goods;
 
@@ -15,7 +15,7 @@ public class Utils {
 	static String[] quit = new String[] { "q", "quit" };
 	static String[] order = new String[] { "o", "order" };
 	static int unlimitedAmount = 99999;
-	static final Map<String, Goods> map = new ConcurrentHashMap<>();
+	static final Map<String, Goods> map = new HashMap<>();
 
 	public static boolean orderInputChk(String input) {
 		for (String str : order) {
